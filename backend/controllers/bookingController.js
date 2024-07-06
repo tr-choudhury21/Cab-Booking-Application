@@ -1,14 +1,20 @@
-const Booking = require('../models/bookingModel');
+const Booking = require('../models/Booking');
 
-const createBooking = async (req, res) => {
-    const { user, pickupLocation, dropLocation, date } = req.body;
+exports.getAllBookings = async (req, res) => {
     try {
-        const booking = new Booking({ user, pickupLocation, dropLocation, date });
-        await booking.save();
-        res.status(201).send(booking);
-    } catch (error) {
-        res.status(400).send(error);
+        const bookings = await Booking.find().populate('cab');
+        res.json(bookings);
+    } catch (err) {
+        res.status(500).send('Server Error');
     }
 };
 
-module.exports = { createBooking };
+exports.addBooking = async (req, res) => {
+    try {
+        const newBooking = new Booking(req.body);
+        const booking = await newBooking.save();
+        res.json(booking);
+    } catch (err) {
+        res.status(500).send('Server Error');
+    }
+};
