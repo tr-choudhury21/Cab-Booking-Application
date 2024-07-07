@@ -9,6 +9,11 @@ const cabSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    model: {
+        type: String,
+        required: true,
+        trim: true
+      },
     capacity: {
         type: Number,
         required: true
