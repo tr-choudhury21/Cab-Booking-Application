@@ -5,6 +5,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const registerController = async (req, res) => {
+
+  const {username, email, password} = req.body;
+
   try {
     const existingUser = await userModel.findOne({ email: req.body.email });
     if (existingUser) {
@@ -24,7 +27,7 @@ const registerController = async (req, res) => {
   } catch (error) {
     res.status(400).send({
       success: false,
-      message: `Register Controller ${error.message}`
+      message: `${error.message}`
     });
   }
 };
