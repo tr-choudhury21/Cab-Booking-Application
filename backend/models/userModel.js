@@ -10,40 +10,40 @@ const UserSchema = new mongoose.Schema({
 
   firstName: {
     type: String,
-    required: [true, "first name is required"],
+    // required: [true, "first name is required"],
     trim: true
   },
   lastName: {
     type: String,
-    required: [true, "last name is required"],
+    // required: [true, "last name is required"],
     trim: true
   },
   phone: {
     type: String,
-    required: [true, "phone no is required"]
+    // required: [true, "phone no is required"]
   },
 
   address: {
     type: String,
-    required: [true, "address is required"]
+    // required: [true, "address is required"]
   },
   city: {
     type: String,
-    required: [true, "city is required"]
+    // required: [true, "city is required"]
   },
   pin: {
     type: Number,
-    required: [true, "pin is required"]
+    // required: [true, "pin is required"]
   },
   location: {
     type: {
       type: String,
       enum: ["Point"],
-      required: true
+      // required: true
     },
     coordinates: {
       type: [Number],
-      required: true
+      // required: true
     }
   }
 });
