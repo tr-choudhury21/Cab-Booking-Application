@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: [true, "username is required"] },
   email: { type: String, required: [true, "email is required"], unique: true },
@@ -47,6 +48,22 @@ const UserSchema = new mongoose.Schema({
     }
   }
 });
+
+
+UserSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+// Match user entered password with hashed password in database
+UserSchema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
 
 UserSchema.index({ location: "2dsphere" });
 

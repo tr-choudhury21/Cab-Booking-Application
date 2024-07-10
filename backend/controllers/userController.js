@@ -17,9 +17,7 @@ const registerController = async (req, res) => {
     }
 
    
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    req.body.password = hashedPassword;
+   
 
     const user = new userModel({ username, email, password });
     await user.save();
@@ -42,16 +40,22 @@ const loginController = async (req, res) => {
         .status(200)
         .send({ message: "user not found", success: false });
     }
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res
         .status(200)
         .send({ message: "Invalid Email or Password", success: false });
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "2d"
+    const payload = {
+      user: {
+        id: user.id
+      }
+    };
+
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+      if (err) throw err;
+      res.json({ token });
     });
-    res.status(200).send({ message: "Login success", success: true, token });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: `Error in Login CTRL ${error.message}` });
