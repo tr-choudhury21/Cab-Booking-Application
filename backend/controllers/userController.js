@@ -1,7 +1,7 @@
 const userModel = require("../models/userModel.js");
 // const driverModel = require("../models/driverModel.js");
 
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const registerController = async (req, res) => {
