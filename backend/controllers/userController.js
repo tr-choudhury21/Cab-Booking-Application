@@ -3,6 +3,7 @@ const userModel = require("../models/userModel.js");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { generateToken } = require("../utils/jwtToken.js");
 
 const registerController = async (req, res) => {
 
@@ -16,13 +17,12 @@ const registerController = async (req, res) => {
         .send({ message: "User Already Exists", success: false });
     }
 
-   
-   
-
     const user = new userModel({ username, email, password });
     await user.save();
-    res.status(201).send({ message: "Registered successfully", success: true });
-  } catch (error) {
+    generateToken(user, "User Registered Successfully!", 201, res);
+
+    }
+  catch (error) {
     res.status(400).send({
       success: false,
       message: `${error.message}`
@@ -46,6 +46,9 @@ const loginController = async (req, res) => {
         .status(200)
         .send({ message: "Invalid Email or Password", success: false });
     }
+
+    generateToken(user, "User Logged in successfully", 200, res);
+
     const payload = {
       user: {
         id: user.id
@@ -87,4 +90,14 @@ const authController = async (req, res) => {
   }
 };
 
-module.exports = { registerController, loginController, authController };
+const logoutUser = async(req, res, next) => {
+  res.status(200).cookie("userToken", "", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  }).json({
+    success: true,
+    message: "User logged out successfully!"
+  });
+};
+
+module.exports = { registerController, loginController, authController, logoutUser };
