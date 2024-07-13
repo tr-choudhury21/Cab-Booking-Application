@@ -1,14 +1,16 @@
 const express = require('express');
-const { registerController, loginController, authController, logoutUser } = require('../controllers/userController');
+const { userRegistration, login, authController, logoutUser, logoutAdmin, getUserDetails, logoutDriver } = require('../controllers/userController');
 
-const authMiddleware = require("../middlewares/authMiddleware");
+const {isAdminAuthenticated, isUserAuthenticated, isDriverAuthenticated} = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.post('/register', registerController);
-
-router.post('/login', loginController);
-
-router.get("/logout",authMiddleware, logoutUser);
+router.post('/register', userRegistration);
+router.post('/login', login);
+router.get('/user/me', isUserAuthenticated, getUserDetails);
+router.get('/admin/me', isAdminAuthenticated, getUserDetails);
+router.get("/user/logout", isUserAuthenticated, logoutUser);
+router.get("/admin/logout", isAdminAuthenticated, logoutAdmin);
+router.get("/driver/logout", isDriverAuthenticated, logoutDriver);
 
 module.exports = router;
