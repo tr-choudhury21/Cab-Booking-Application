@@ -137,6 +137,8 @@ const logoutAdmin = async(req, res, next) => {
 
 //Driver Registration
 
+
+
 const driverRegistration = async(req, res, next) => {
 
   const {username, email, password, role, firstName, lastName, phone, address, city, pin, licenseNumber} = req.body;
@@ -144,7 +146,7 @@ const driverRegistration = async(req, res, next) => {
   try {
       const existingDriver = await userModel.findOne({ email });
       if (existingDriver) {
-          return res
+        return res
           .status(200)
           .send({ message: "User Already Exists", success: false });
       }
@@ -155,10 +157,10 @@ const driverRegistration = async(req, res, next) => {
   
   }
   catch (error) {
-      res.status(400).send({
-          success: false,
-          message: `${error.message}`
-      });
+    res.status(400).send({
+      success: false,
+      message: `${error.message}`
+    });
   }
 };
 

@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema({
   username: {
-      type: String, 
-      required: [true, "username is required"]
+    type: String, 
+    required: [true, "username is required"]
   },
 
   email: { 
@@ -62,11 +62,10 @@ const UserSchema = new mongoose.Schema({
     type: Number,
   },
 
-  licenseNumber: {
-    type: String,
-    required: true,
-    unique: true
-  },
+  // licenseNumber: {
+  //   type: String,
+  //   unique: true
+  // },
 
   cabId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -88,10 +87,10 @@ const UserSchema = new mongoose.Schema({
     default: 0,
   },
 
-  cabRegistration: {
-    type: String,
-    unique: true,
-  }
+  // cabRegistration: {
+  //   type: String,
+  //   unique: true,
+  // }
 });
 
 
@@ -111,7 +110,7 @@ UserSchema.methods.matchPassword = async function(enteredPassword) {
 
 UserSchema.methods.generateJsonWebToken = function(){
   return jwt.sign({id: this._id,}, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES,
+    expiresIn: process.env.JWT_EXPIRES,
   })
 };
 
